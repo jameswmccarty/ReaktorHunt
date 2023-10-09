@@ -1,0 +1,87 @@
+600 REM print maze
+610 IF maze_drawn THEN GOTO 730
+620 LET maze_drawn = 1
+630 LET pr = PEEK(1) : LET pc = PEEK(2) : REM player row, column
+640 CLS : REM the first time around we need to draw the maze
+650 LOCATE 2,1
+660 FOR row = 0 TO height-1
+670     LET s$ = ""
+680     FOR col = 0 TO width-1
+690         LET cell = PEEK(16 + row * width + col)
+700         s$ = s$ + MID$(" X", cell, 1)
+710     NEXT col : PRINT s$
+720 NEXT row
+730 REM erase the previous player position and print the new one
+740 LOCATE 2+pr, 1+pc : PRINT " ";
+750 pr = PEEK(1) : pc = PEEK(2)
+760 LOCATE 2+pr, 1+pc : PRINT "@";
+770 REM print the number of steps so far
+780 LOCATE 1,10 : PRINT "STEPS: "; steps;
+790 LET steps = steps + 1
+800 RETURN
+
+1000 REM calculate player direction
+1010 LET player_row = PEEK(1)
+1020 LET player_col = PEEK(2)
+1030 REM these variables tell whether there's a wall in that direction
+1040 LET right = PEEK(16 + player_row * width + player_col + 1)
+1050 LET down = PEEK(16 + (player_row+1) * width + player_col)
+1060 LET left = PEEK(16 + player_row * width + player_col - 1)
+1070 LET up = PEEK(16 + (player_row-1) * width + player_col)
+1080 REM TODO: write the next direction at memory address 0
+1090 REM directions: 0=right, 1=down, 2=left, 3=up
+
+1091 ld = PEEK(0) : REM current direction of motion
+
+1092 IF ld = 0 THEN
+1093   IF down = 0 THEN
+1094     POKE 0,1 : RETURN
+1095   END IF
+1096   IF right = 0 THEN
+1097     POKE 0,0 : RETURN
+1098   END IF
+1099   IF up = 0 THEN
+1100     POKE 0,3 : RETURN
+1101   END IF
+1102   POKE 0,2 : RETURN
+1103 END IF
+
+1108 IF ld = 1 THEN
+1109   IF left = 0 THEN
+1110     POKE 0,2 : RETURN
+1111   END IF
+1112   IF down = 0 THEN
+1113     POKE 0,1 : RETURN
+1114   END IF
+1115   IF right = 0 THEN
+1116     POKE 0,0 : RETURN
+1117   END IF
+1118   POKE 0,3 : RETURN
+1123 END IF
+
+1124 IF ld = 2 THEN
+1125   IF up = 0 THEN
+1126     POKE 0,3 : RETURN
+1127   END IF
+1128   IF left = 0 THEN
+1129     POKE 0,2 : RETURN
+1130   END IF
+1131   IF down = 0 THEN
+1132     POKE 0,1 : RETURN
+1133   END IF
+1134   POKE 0,0
+1137 END IF
+
+1139 IF ld = 3 THEN
+1140   IF right = 0 THEN
+1141     POKE 0,0 : RETURN
+1142   END IF
+1143   IF up = 0 THEN
+1144     POKE 0,3 : RETURN
+1145   END IF
+1146   IF left = 0 THEN
+1147     POKE 0,2 : RETURN
+1148   END IF
+1152   POKE 0,1 : RETURN
+1154 END IF
+1155 RETURN

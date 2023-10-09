@@ -1,0 +1,28 @@
+000 REM https://hunt.reaktor.com/
+
+001 REM Level 1
+002 REM https://hunt.reaktor.com/level-1
+
+600 REM print maze
+610 REM clear the screen
+611 IF steps = 0 THEN
+620   CLS
+621   last_x = PEEK(1)
+622   last_y = PEEK(2)
+640   FOR row = 0 TO height-1
+650     FOR col = 0 TO width-1
+710       LET cell = PEEK(16 + row * width + col)
+730       IF cell = 1 THEN
+731         LOCATE row+2,col+1 : PRINT "X";
+732       END IF
+750     NEXT col
+770   NEXT row
+771 END IF
+780 REM print some statistics on top
+790 LOCATE 1, 10 : PRINT "STEPS: "; steps
+800 steps = steps + 1
+801 LOCATE last_x+2, last_y+1 : PRINT " ";
+802 LOCATE PEEK(1)+2, PEEK(2)+1 : PRINT "@";
+803 last_x = PEEK(1)
+804 last_y = PEEK(2)
+810 RETURN
