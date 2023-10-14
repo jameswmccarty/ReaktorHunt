@@ -1,0 +1,72 @@
+3000 REM TODO: solve the maze... here is similar starting code as before
+3010 LET player_row = PEEK(1)
+3020 LET player_col = PEEK(2)
+3030 REM these variables tell whether there's a wall in that direction
+3040 DIM dirs(5)
+3050 LET dirs(0) = PEEK(16 + player_row * width + player_col + 1)
+3060 LET dirs(1) = PEEK(16 + (player_row+1) * width + player_col)
+3070 LET dirs(2) = PEEK(16 + player_row * width + player_col - 1)
+3080 LET dirs(3) = PEEK(16 + (player_row-1) * width + player_col)
+
+3082 right = dirs(0)
+3083 down = dirs(1)
+3084 left = dirs(2)
+3085 up = dirs(3)
+
+3087 ld = PEEK(0) : REM current direction of motion
+
+3088 IF player_row = 117 AND player_col >= 123 THEN
+3089   POKE 0,2 : RETURN
+3090 END IF
+
+3097 IF ld = 0 THEN
+3098   IF down = 0 OR down = 2 THEN
+3099     POKE 0,1 : RETURN
+3100   END IF
+3101   IF right = 0 OR right = 2 THEN
+3102     POKE 0,0 : RETURN
+3103   END IF
+3104   IF up = 0 OR up = 2 THEN
+3105     POKE 0,3 : RETURN
+3106   END IF
+3107   POKE 0,2 : RETURN
+3108 END IF
+
+3109 IF ld = 1 THEN
+3110   IF left = 0 OR left = 2 THEN
+3111     POKE 0,2 : RETURN
+3112   END IF
+3113   IF down = 0 OR down = 2 THEN
+3114     POKE 0,1 : RETURN
+3115   END IF
+3116   IF right = 0 OR right = 2 THEN
+3117     POKE 0,0 : RETURN
+3118   END IF
+3119   POKE 0,3 : RETURN
+3123 END IF
+
+3124 IF ld = 2 THEN
+3125   IF up = 0 OR up = 2 THEN
+3126     POKE 0,3 : RETURN
+3127   END IF
+3128   IF left = 0 OR left = 2 THEN
+3129     POKE 0,2 : RETURN
+3130   END IF
+3131   IF down = 0 OR down = 2 THEN
+3132     POKE 0,1 : RETURN
+3133   END IF
+3134   POKE 0,0 : RETURN
+3137 END IF
+
+3139 IF ld = 3 THEN
+3140   IF right = 0 OR right = 2 THEN
+3141     POKE 0,0 : RETURN
+3142   END IF
+3143   IF up = 0 OR up = 2 THEN
+3144     POKE 0,3 : RETURN
+3145   END IF
+3146   IF left = 0 OR left = 2 THEN
+3147     POKE 0,2 : RETURN
+3148   END IF
+3152   POKE 0,1 : RETURN
+3154 END IF
